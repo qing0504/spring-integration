@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+    <bean id="outputService" class="wcy.springframework.service.impl.OutputServiceImpl" />
+
+    <bean id="helloWorldService" class="wcy.springframework.service.impl.HelloWorldServiceImpl">
+        <property name="text" value="Hello World!"></property>
+        <property name="outputService" ref="outputService"></property>
+    </bean>
+
+    <bean id="autoProxyCreator" class="wcy.springframework.aop.AspectJAwareAdvisorAutoProxyCreator"></bean>
+
+    <bean id="timeInterceptor" class="wcy.springframework.aop.TimerInterceptor"></bean>
+
+    <!-- 配置AOP -->
+    <bean id="aspectjAspect" class="wcy.springframework.aop.AspectJExpressionPointcutAdvisor">
+        <!-- 配置切面 -->
+        <property name="advice" ref="timeInterceptor"></property>
+        <!-- 配置切点 -->
+        <!-- 通过AspectJ表达式可以知道拦截哪个类的哪个方法或哪些方法 -->
+        <property name="expression" value="execution(* wcy.springframework.service.*.*(..))"></property>
+    </bean>
+
+</beans>
