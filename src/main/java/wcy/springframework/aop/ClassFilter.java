@@ -12,5 +12,4 @@ public interface ClassFilter {
      * @return
      */
     boolean matches(Class targetClass);
-
 }

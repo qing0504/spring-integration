@@ -50,7 +50,7 @@ public class Cglib2AopProxy extends AbstractAopProxy {
 
         private AdvisedSupport advised;
 
-        // 用户写的的方法拦截器
+        /** 用户写的的方法拦截器 */
         private org.aopalliance.intercept.MethodInterceptor delegateMethodInterceptor;
 
         private DynamicAdvisedInterceptor(AdvisedSupport advised) {
@@ -58,7 +58,9 @@ public class Cglib2AopProxy extends AbstractAopProxy {
             this.delegateMethodInterceptor = advised.getMethodInterceptor();
         }
 
-        // 拦截代理对象的所有方法
+        /**
+         * 拦截代理对象的所有方法
+         */
         @Override
         public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
             // 如果advised.getMethodMatcher()为空(编程式的使用aop，例如：Cglib2AopProxyTest.java)，拦截该类的所有方法
@@ -75,7 +77,7 @@ public class Cglib2AopProxy extends AbstractAopProxy {
     }
 
     private static class CglibMethodInvocation extends ReflectiveMethodInvocation {
-        // 方法代理
+        /** 方法代理 */
         private final MethodProxy methodProxy;
 
         public CglibMethodInvocation(Object target, Method method, Object[] args, MethodProxy methodProxy) {
@@ -83,7 +85,9 @@ public class Cglib2AopProxy extends AbstractAopProxy {
             this.methodProxy = methodProxy;
         }
 
-        // 通过methodProxy调用原始对象的方法
+        /**
+         * 通过methodProxy调用原始对象的方法
+         */
         @Override
         public Object proceed() throws Throwable {
             return this.methodProxy.invoke(this.target, this.arguments);

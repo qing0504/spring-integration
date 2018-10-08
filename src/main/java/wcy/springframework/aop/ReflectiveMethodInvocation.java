@@ -9,8 +9,9 @@ import org.aopalliance.intercept.MethodInvocation;
  * 封装被代理对象的方法
  */
 public class ReflectiveMethodInvocation implements MethodInvocation {
-
-    // 原对象
+    /**
+     * 原对象
+     */
     protected Object target;
 
     protected Method method;
@@ -43,7 +44,7 @@ public class ReflectiveMethodInvocation implements MethodInvocation {
      */
     @Override
     public Object proceed() throws Throwable {
-        // tiny-spring这里是调用原始对象的方法
+        // 这里是调用原始对象的方法
         // 不支持拦截器链
 		/*
 			为了支持拦截器链，可以做出以下修改：

@@ -16,7 +16,7 @@ public class Cglib2AopProxyTest {
         helloWorldService.helloWorld();
 
         // // --------- helloWorldService with AOP
-        // // 1. 设置被代理对象(Joinpoint)
+        // // 1. 设置被代理对象(JoinPoint)
         // AdvisedSupport advisedSupport = new AdvisedSupport();
         // TargetSource targetSource = new TargetSource(helloWorldService, HelloWorldServiceImpl.class, HelloWorldService.class);
         // advisedSupport.setTargetSource(targetSource);

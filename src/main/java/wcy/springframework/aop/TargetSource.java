@@ -4,14 +4,14 @@ package wcy.springframework.aop;
  * 封装被代理的对象的类的相关信息
  */
 public class TargetSource {
-
-    // 原对象
+    /**
+     * 原对象
+     */
     private Object target;
 
     private Class<?> targetClass;
 
     private Class<?>[] interfaces;
-
 
     public TargetSource(Object target, Class<?> targetClass, Class<?>... interfaces) {
         this.target = target;

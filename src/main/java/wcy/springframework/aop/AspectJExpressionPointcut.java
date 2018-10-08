@@ -40,8 +40,7 @@ public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodM
     }
 
     public AspectJExpressionPointcut(Set<PointcutPrimitive> supportedPrimitives) {
-        pointcutParser = PointcutParser
-                .getPointcutParserSupportingSpecifiedPrimitivesAndUsingContextClassloaderForResolution(supportedPrimitives);
+        pointcutParser = PointcutParser.getPointcutParserSupportingSpecifiedPrimitivesAndUsingContextClassloaderForResolution(supportedPrimitives);
     }
 
     protected void checkReadyToMatch() {
@@ -83,6 +82,7 @@ public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodM
         } else if (shadowMatch.neverMatches()) {
             return false;
         }
+
         // TODO:其他情况不判断了！见org.springframework.aop.aspectj.RuntimeTestWalker
         return false;
     }
