@@ -1,5 +1,7 @@
-package wcy.springframework.beans;
+package wcy.springframework.beans.support;
 
+import wcy.springframework.beans.BeanDefinition;
+import wcy.springframework.beans.BeanDefinitionReader;
 import wcy.springframework.beans.io.ResourceLoader;
 
 import java.util.HashMap;

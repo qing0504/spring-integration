@@ -1,6 +1,8 @@
-package wcy.springframework.aop;
+package wcy.springframework.aop.aspectj;
 
 import org.aopalliance.aop.Advice;
+import wcy.springframework.aop.Pointcut;
+import wcy.springframework.aop.PointcutAdvisor;
 
 /**
  * AspectJ表达式切点通知器

@@ -2,6 +2,7 @@ package wcy.springframework.aop;
 
 import org.junit.Assert;
 import org.junit.Test;
+import wcy.springframework.aop.aspectj.AspectJExpressionPointcut;
 import wcy.springframework.service.HelloWorldService;
 import wcy.springframework.service.impl.HelloWorldServiceImpl;
 
@@ -18,7 +19,7 @@ public class AspectJExpressionPointcutTest {
 
     @Test
     public void testMethodInterceptor() throws Exception {
-        String expression = "execution(* wcy.springframework.service.*.*(..))";
+        String expression = "execution(* wcy.springframework.service..*.*(..))";
         AspectJExpressionPointcut aspectJExpressionPointcut = new AspectJExpressionPointcut();
         aspectJExpressionPointcut.setExpression(expression);
         boolean matches = aspectJExpressionPointcut.getMethodMatcher()

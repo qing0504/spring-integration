@@ -1,4 +1,4 @@
-package wcy.springframework.aop;
+package wcy.springframework.aop.framework;
 
 /**
  * AopProxy是个标志型接口

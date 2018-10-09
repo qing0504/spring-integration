@@ -1,14 +1,11 @@
 package wcy.springframework.beans.factory;
 
 import org.apache.commons.lang3.StringUtils;
-import wcy.springframework.BeanReference;
-import wcy.springframework.aop.BeanFactoryAware;
+import wcy.springframework.beans.config.BeanReference;
 import wcy.springframework.beans.BeanDefinition;
 import wcy.springframework.beans.PropertyValue;
-import wcy.springframework.exception.BeansException;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**

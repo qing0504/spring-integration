@@ -1,4 +1,4 @@
-package wcy.springframework;
+package wcy.springframework.beans.config;
 
 /**
  * 用于代表property标签的ref属性里的对象

@@ -1,4 +1,4 @@
-package wcy.springframework.aop;
+package wcy.springframework.aop.aspectj;
 
 import java.lang.reflect.Method;
 

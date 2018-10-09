@@ -1,6 +1,8 @@
 package wcy.springframework.aop;
 
 import org.junit.Test;
+import wcy.springframework.aop.framework.AdvisedSupport;
+import wcy.springframework.aop.framework.Cglib2AopProxy;
 import wcy.springframework.service.HelloWorldService;
 import wcy.springframework.service.impl.HelloWorldServiceImpl;
 import wcy.springframework.context.ApplicationContext;
@@ -15,22 +17,22 @@ public class Cglib2AopProxyTest {
         HelloWorldService helloWorldService = (HelloWorldService) applicationContext.getBean("helloWorldService");
         helloWorldService.helloWorld();
 
-        // // --------- helloWorldService with AOP
-        // // 1. 设置被代理对象(JoinPoint)
-        // AdvisedSupport advisedSupport = new AdvisedSupport();
-        // TargetSource targetSource = new TargetSource(helloWorldService, HelloWorldServiceImpl.class, HelloWorldService.class);
-        // advisedSupport.setTargetSource(targetSource);
-        //
-        // // 2. 设置拦截器(Advice)
-        // TimerInterceptor timerInterceptor = new TimerInterceptor();
-        // advisedSupport.setMethodInterceptor(timerInterceptor);
-        //
-        // // 补：没有设置MethodMatcher，所以拦截该类的所有方法
-        // // 3. 创建代理(Proxy)
-        // Cglib2AopProxy cglib2AopProxy = new Cglib2AopProxy(advisedSupport);
-        // HelloWorldService helloWorldServiceProxy = (HelloWorldService) cglib2AopProxy.getProxy();
-        //
-        // // 4. 基于AOP的调用
-        // helloWorldServiceProxy.helloWorld();
+        // --------- helloWorldService with AOP
+        // 1. 设置被代理对象(JoinPoint)
+        AdvisedSupport advisedSupport = new AdvisedSupport();
+        TargetSource targetSource = new TargetSource(helloWorldService, HelloWorldServiceImpl.class, HelloWorldService.class);
+        advisedSupport.setTargetSource(targetSource);
+
+        // 2. 设置拦截器(Advice)
+        TimerInterceptor timerInterceptor = new TimerInterceptor();
+        advisedSupport.setMethodInterceptor(timerInterceptor);
+
+        // 补：没有设置MethodMatcher，所以拦截该类的所有方法
+        // 3. 创建代理(Proxy)
+        Cglib2AopProxy cglib2AopProxy = new Cglib2AopProxy(advisedSupport);
+        HelloWorldService helloWorldServiceProxy = (HelloWorldService) cglib2AopProxy.getProxy();
+
+        // 4. 基于AOP的调用
+        helloWorldServiceProxy.helloWorld();
     }
 }

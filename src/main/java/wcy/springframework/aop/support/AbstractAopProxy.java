@@ -1,4 +1,7 @@
-package wcy.springframework.aop;
+package wcy.springframework.aop.support;
+
+import wcy.springframework.aop.framework.AdvisedSupport;
+import wcy.springframework.aop.framework.AopProxy;
 
 /**
  * 继承了AopProxy接口，有获取代理对象的能力
