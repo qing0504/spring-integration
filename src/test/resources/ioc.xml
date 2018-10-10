@@ -10,17 +10,25 @@
         <property name="outputService" ref="outputService"></property>
     </bean>
 
-    <bean id="autoProxyCreator" class="wcy.springframework.aop.AspectJAwareAdvisorAutoProxyCreator"></bean>
+    <bean id="autoProxyCreator" class="wcy.springframework.aop.aspectj.AspectJAwareAdvisorAutoProxyCreator"></bean>
 
     <bean id="timeInterceptor" class="wcy.springframework.aop.TimerInterceptor"></bean>
-
     <!-- 配置AOP -->
-    <bean id="aspectjAspect" class="wcy.springframework.aop.AspectJExpressionPointcutAdvisor">
+    <bean id="aspectjAspect" class="wcy.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
         <!-- 配置切面 -->
         <property name="advice" ref="timeInterceptor"></property>
         <!-- 配置切点 -->
         <!-- 通过AspectJ表达式可以知道拦截哪个类的哪个方法或哪些方法 -->
-        <property name="expression" value="execution(* wcy.springframework.service.*.*(..))"></property>
+        <property name="expression" value="execution(* wcy.springframework.service.HelloWorldService.*(..))"></property>
+    </bean>
+
+    <bean id="aroundAdviceInterceptor" class="wcy.springframework.aop.AroundAdviceInterceptor"></bean>
+    <bean id="aroundAspectjAspect" class="wcy.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+        <!-- 配置切面 -->
+        <property name="advice" ref="aroundAdviceInterceptor"></property>
+        <!-- 配置切点 -->
+        <!-- 通过AspectJ表达式可以知道拦截哪个类的哪个方法或哪些方法 -->
+        <property name="expression" value="execution(* wcy.springframework.service.OutputService.*(..))"></property>
     </bean>
 
 </beans>
