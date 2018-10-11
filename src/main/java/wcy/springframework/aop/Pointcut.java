@@ -23,4 +23,19 @@ public interface Pointcut {
      */
     MethodMatcher getMethodMatcher();
 
+    /**
+     * Canonical Pointcut instance that always matches.
+     */
+    Pointcut TRUE = new Pointcut() {
+        @Override
+        public ClassFilter getClassFilter() {
+            return ClassFilter.TRUE;
+        }
+
+        @Override
+        public MethodMatcher getMethodMatcher() {
+            return MethodMatcher.TRUE;
+        }
+    };
+
 }

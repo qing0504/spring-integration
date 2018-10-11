@@ -25,7 +25,7 @@ public class Cglib2AopProxyTest {
 
         // 2. 设置拦截器(Advice)
         TimerInterceptor timerInterceptor = new TimerInterceptor();
-        advisedSupport.setMethodInterceptor(timerInterceptor);
+        advisedSupport.addAdvice(timerInterceptor);
 
         // 补：没有设置MethodMatcher，所以拦截该类的所有方法
         // 3. 创建代理(Proxy)

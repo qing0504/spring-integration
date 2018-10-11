@@ -27,13 +27,14 @@ public class JdkDynamicAopProxyTest {
 
         // 2. 设置拦截器(Advice)
         TimerInterceptor timerInterceptor = new TimerInterceptor();
-        advisedSupport.setMethodInterceptor(timerInterceptor);
+        advisedSupport.addAdvice(timerInterceptor);
+        advisedSupport.addAdvice(new AroundAdviceInterceptor());
 
         // 3. 设置MethodMatcher
-        String expression = "execution(* wcy.springframework.service..*.*(..))";
-        AspectJExpressionPointcut aspectJExpressionPointcut = new AspectJExpressionPointcut();
-        aspectJExpressionPointcut.setExpression(expression);
-        advisedSupport.setMethodMatcher(aspectJExpressionPointcut.getMethodMatcher());
+        // String expression = "execution(* wcy.springframework.service..*.*(..))";
+        // AspectJExpressionPointcut aspectJExpressionPointcut = new AspectJExpressionPointcut();
+        // aspectJExpressionPointcut.setExpression(expression);
+        // advisedSupport.setMethodMatcher(aspectJExpressionPointcut.getMethodMatcher());
 
         // 补：由于用户未设置MethodMatcher，所以通过代理还是调用的原方法(JdkDynamicAopProxy中的invoke方法最后
         // 返回method.invoke(...)而不是methodInterceptor.invoke(...) )

@@ -1,5 +1,7 @@
 package wcy.springframework.aop.aspectj;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.aopalliance.intercept.MethodInterceptor;
@@ -43,26 +45,49 @@ public class AspectJAwareAdvisorAutoProxyCreator implements BeanPostProcessor, B
         // 通过getBeansForType方法加载BeanFactory 中所有的 PointcutAdvisor（保证了 PointcutAdvisor 的实例化顺序优于普通 Bean。)
         // AspectJ方式实现织入,这里它会扫描所有Pointcut，并对bean做织入。
         List<AspectJExpressionPointcutAdvisor> advisors = beanFactory.getBeansForType(AspectJExpressionPointcutAdvisor.class);
+        // for (AspectJExpressionPointcutAdvisor advisor : advisors) {
+        //     // 匹配要拦截的类
+        //     // 使用AspectJExpressionPointcut的matches匹配器，判断当前对象是不是要拦截的类的对象。
+        //     if (advisor.getPointcut().getClassFilter().matches(bean.getClass())) {
+        //         // ProxyFactory继承了AdvisedSupport，所以内部封装了TargetSource和MethodInterceptor的元数据对象
+        //         ProxyFactory advisedSupport = new ProxyFactory();
+        //         // 设置切点的方法拦截器
+        //         advisedSupport.setMethodInterceptor((MethodInterceptor) advisor.getAdvice());
+        //         // 设置切点的方法匹配器
+        //         // 利用AspectJ表达式进行方法匹配
+        //         // AspectJExpressionPointcutAdvisor里的AspectJExpressionPointcut的getMethodMatcher()方法
+        //         advisedSupport.setMethodMatcher(advisor.getPointcut().getMethodMatcher());
+        //         // 是要拦截的类, 生成一个 TargetSource（要拦截的对象和其类型）(被代理对象)
+        //         TargetSource targetSource = new TargetSource(bean, bean.getClass(), bean.getClass().getInterfaces());
+        //         advisedSupport.setTargetSource(targetSource);
+        //         // 交给实现了 AopProxy接口的getProxy方法的ProxyFactory去生成代理对象
+        //         return advisedSupport.getProxy();
+        //     }
+        // }
+
+        sortAdvisors(advisors);
+        ProxyFactory advisedSupport = new ProxyFactory();
         for (AspectJExpressionPointcutAdvisor advisor : advisors) {
-            // 匹配要拦截的类
-            // 使用AspectJExpressionPointcut的matches匹配器，判断当前对象是不是要拦截的类的对象。
-            if (advisor.getPointcut().getClassFilter().matches(bean.getClass())) {
-                // ProxyFactory继承了AdvisedSupport，所以内部封装了TargetSource和MethodInterceptor的元数据对象
-                ProxyFactory advisedSupport = new ProxyFactory();
-                // 设置切点的方法拦截器
-                advisedSupport.setMethodInterceptor((MethodInterceptor) advisor.getAdvice());
-                // 设置切点的方法匹配器
-                // 利用AspectJ表达式进行方法匹配
-                // AspectJExpressionPointcutAdvisor里的AspectJExpressionPointcut的getMethodMatcher()方法
-                advisedSupport.setMethodMatcher(advisor.getPointcut().getMethodMatcher());
-                // 是要拦截的类, 生成一个 TargetSource（要拦截的对象和其类型）(被代理对象)
-                TargetSource targetSource = new TargetSource(bean, bean.getClass(), bean.getClass().getInterfaces());
-                advisedSupport.setTargetSource(targetSource);
-                // 交给实现了 AopProxy接口的getProxy方法的ProxyFactory去生成代理对象
-                return advisedSupport.getProxy();
-            }
+            advisedSupport.addAdvisor(advisor);
         }
+        // 是要拦截的类, 生成一个 TargetSource（要拦截的对象和其类型）(被代理对象)
+        TargetSource targetSource = new TargetSource(bean, bean.getClass(), bean.getClass().getInterfaces());
+        advisedSupport.setTargetSource(targetSource);
+        bean = advisedSupport.getProxy();
         return bean;
+    }
+
+    private void sortAdvisors(List<AspectJExpressionPointcutAdvisor> list) {
+        if (list.size() > 1) {
+            Collections.sort(list, new Comparator<AspectJExpressionPointcutAdvisor>() {
+                @Override
+                public int compare(AspectJExpressionPointcutAdvisor o1, AspectJExpressionPointcutAdvisor o2) {
+                    int i1 = o1.getOrder();
+                    int i2 = o2.getOrder();
+                    return (i1 < i2) ? -1 : (i1 > i2) ? 1 : 0;
+                }
+            });
+        }
     }
 
     @Override

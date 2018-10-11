@@ -1,6 +1,7 @@
 package wcy.springframework.aop.framework;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -64,17 +65,28 @@ public class Cglib2AopProxy extends AbstractAopProxy {
          * 拦截代理对象的所有方法
          */
         @Override
-        public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-            // 如果advised.getMethodMatcher()为空(编程式的使用aop，例如：Cglib2AopProxyTest.java)，拦截该类的所有方法
-            // 如果有方法匹配器(声明式的在xml文件里配置了AOP)并且匹配方法成功就拦截指定的方法
-            if (advised.getMethodMatcher() == null
-                    || advised.getMethodMatcher().matches(method, advised.getTargetSource().getTargetClass())) {
-                // delegateMethodInterceptor通过advised.getMethodInterceptor()得到用户写的方法拦截器
-                // 返回去调用用户写的拦截器的invoke方法(用户根据需要在调用proceed方法前后添加相应行为,例如：TimerInterceptor.java)
-                return delegateMethodInterceptor.invoke(new CglibMethodInvocation(advised.getTargetSource().getTarget(), method, args, proxy));
+        public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+            Object target = getTarget();
+            List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, target.getClass());
+            if (chain == null || chain.isEmpty()) {
+                return methodProxy.invoke(target, args);
             }
+
+            // // 如果advised.getMethodMatcher()为空(编程式的使用aop，例如：Cglib2AopProxyTest.java)，拦截该类的所有方法
+            // // 如果有方法匹配器(声明式的在xml文件里配置了AOP)并且匹配方法成功就拦截指定的方法
+            // if (advised.getMethodMatcher() == null
+            //         || advised.getMethodMatcher().matches(method, advised.getTargetSource().getTargetClass())) {
+            //     // delegateMethodInterceptor通过advised.getMethodInterceptor()得到用户写的方法拦截器
+            //     // 返回去调用用户写的拦截器的invoke方法(用户根据需要在调用proceed方法前后添加相应行为,例如：TimerInterceptor.java)
+            //     return delegateMethodInterceptor.invoke(new CglibMethodInvocation(proxy, advised.getTargetSource().getTarget(), method, args, chain, methodProxy));
+            // }
+
             // 有AspectJ表达式，但没有匹配该方法，返回通过methodProxy调用原始对象的该方法
-            return new CglibMethodInvocation(advised.getTargetSource().getTarget(), method, args, proxy).proceed();
+            return new CglibMethodInvocation(proxy, advised.getTargetSource().getTarget(), method, args, chain, methodProxy).proceed();
+        }
+
+        protected Object getTarget() {
+            return this.advised.getTargetSource().getTarget();
         }
     }
 
@@ -82,18 +94,18 @@ public class Cglib2AopProxy extends AbstractAopProxy {
         /** 方法代理 */
         private final MethodProxy methodProxy;
 
-        public CglibMethodInvocation(Object target, Method method, Object[] args, MethodProxy methodProxy) {
-            super(target, method, args);
+        public CglibMethodInvocation(Object proxy, Object target, Method method, Object[] args, List<Object> interceptorsAndDynamicMethodMatchers, MethodProxy methodProxy) {
+            super(proxy, target, method, args, interceptorsAndDynamicMethodMatchers);
             this.methodProxy = methodProxy;
         }
 
-        /**
-         * 通过methodProxy调用原始对象的方法
-         */
-        @Override
-        public Object proceed() throws Throwable {
-            return this.methodProxy.invoke(this.target, this.arguments);
-        }
+        // /**
+        //  * 通过methodProxy调用原始对象的方法
+        //  */
+        // @Override
+        // public Object proceed() throws Throwable {
+        //     return this.methodProxy.invoke(this.target, this.arguments);
+        // }
     }
 
 }

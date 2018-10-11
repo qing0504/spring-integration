@@ -2,12 +2,12 @@ package wcy.springframework.aop.aspectj;
 
 import org.aopalliance.aop.Advice;
 import wcy.springframework.aop.Pointcut;
-import wcy.springframework.aop.PointcutAdvisor;
+import wcy.springframework.aop.support.AbstractPointcutAdvisor;
 
 /**
  * AspectJ表达式切点通知器
  */
-public class AspectJExpressionPointcutAdvisor implements PointcutAdvisor {
+public class AspectJExpressionPointcutAdvisor extends AbstractPointcutAdvisor {
 
     /**
      * AspectJ表达式切点匹配器

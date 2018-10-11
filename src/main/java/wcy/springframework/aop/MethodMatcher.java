@@ -16,4 +16,13 @@ public interface MethodMatcher {
      */
     boolean matches(Method method, Class targetClass);
 
+    /**
+     * Canonical instance that matches all methods.
+     */
+    MethodMatcher TRUE = new MethodMatcher() {
+        @Override
+        public boolean matches(Method method, Class targetClass) {
+            return true;
+        }
+    };
 }
